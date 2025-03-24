@@ -1,3 +1,4 @@
+Question 1
 
 CREATE TABLE ProductDetail_1NF (
     OrderID INT,
@@ -18,3 +19,32 @@ JOIN (
 ) n
 ON LENGTH(Products) - LENGTH(REPLACE(Products, ',', '')) >= n.digit
 ORDER BY OrderID, Product;
+
+
+Question 2
+
+-- Create the Orders table
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY,
+    CustomerName VARCHAR(255)
+);
+
+-- Create the OrderDetails table
+CREATE TABLE OrderDetails (
+    OrderID INT,
+    Product VARCHAR(255),
+    Quantity INT,
+    PRIMARY KEY (OrderID, Product),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+);
+
+
+-- Insert data into the Orders table
+INSERT INTO Orders (OrderID, CustomerName)
+SELECT DISTINCT OrderID, CustomerName
+FROM OrderDetails;
+
+-- Insert data into the OrderDetails table
+INSERT INTO OrderDetails (OrderID, Product, Quantity)
+SELECT OrderID, Product, Quantity
+FROM OrderDetails;
